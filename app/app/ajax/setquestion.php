@@ -51,7 +51,54 @@ function getCurrentQuestion() {
     return new Question((int) Registry::getValue(REG_QUESTION_CURRENT));
 }
 
+/**
+ * Return an error.
+ *
+ * @param string $msg The message
+ * @return string
+ */
+function returnError($msg) {
+    // Return the error as JSON
+    returnJson(Array('error' => $msg));
+}
+
+/**
+ * Return an array with data as JSON.
+ *
+ * @param Array $array The array to return as JSON.
+ */
+function returnJson($array) {
+    // Encode the json
+    $json = json_encode($array);
+
+    // Set the page headers
+    header('Content-Type: application/json');
+
+    // Print the json
+    die($json);
+}
+
+// Make sure the team is valid
+if(!StringUtils::equals($team, $VALID_TEAMS, true))
+    returnError('Invalid team.');
 
 // Get the current question
 $question = getCurrentQuestion();
 
+// Make sure the answer is set
+if(!isset($_GET['a']))
+    returnError('Answer not set!');
+
+// Get the answer and make sure it's valid
+$answer = trim($_GET['a']);
+if(!StringUtils::equals($answer, Array('a', 'b', 'c', 'd', true, false)))
+    returnError('Invalid answer.');
+
+// Make sure the answer isn't set yet
+if($question->hasTeamAnswer(($team)))
+    returnJson(Array('result' => 'Answer already set.'));
+
+// Set the answer
+$question->setTeamAnswer($team, $answer);
+
+returnJson(Array('result' => 'Answer set.'));

@@ -492,10 +492,14 @@ $(document).on('pageshow', function() {
 /**
  * Refresh the current jQuery mobile page.
  */
-function refreshPage() {
+function refreshPage(transition) {
+    // Use the transition default if not set
+    transition = typeof transition !== 'undefined' ? transition : 'none';
+
+    // Reload the page with the specified transition
     jQuery.mobile.changePage(window.location.href, {
         allowSamePageTransition: true,
-        transition: 'none',
+        transition: transition,
         reloadPage: true,
         reverse: false,
         changeHash: false
@@ -900,13 +904,44 @@ function hideLoader() {
 }
 
 
+/**
+ * Set a question answer.
+ *
+ * @param answer The answer.
+ * @param success
+ */
+function setAnswer(answer, success) {
+    showLoader('Antwoord sturen...');
 
+    // Send an AJAX request to send the answer, call the success callback if the request succeed.
+    $.ajax({
+        dataType: "json",
+        url: "ajax/setquestion.php",
+        data: {"answer": answer},
+        success: success,
+        complete: function {
+            // Hide the loader
+            hideLoader();
+        }
+    });
+}
 
+// Create the button click handlers
+$(document).on("pagecreate", function() {
+    // Create the button click handlers
+    $('.button-a').click(function() { processButtonClick('a'); });
+    $('.button-b').click(function() { processButtonClick('b'); });
+    $('.button-c').click(function() { processButtonClick('c'); });
+    $('.button-d').click(function() { processButtonClick('d'); });
 
-
-
-
-
-
-
-
+    /**
+     * Process a button click.
+     *
+     * @param answer The answer.
+     */
+    function processButtonClick(answer) {
+        setAnswer(answer);
+        refreshPage('slide');
+        return false;
+    }
+});

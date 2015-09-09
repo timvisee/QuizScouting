@@ -106,12 +106,12 @@ if(StringUtils::equals($team, Array('a', 'b', 'c'))) {
 
                 <table style="width: 100%;">
                     <tr>
-                        <td style="width: 50%;"><a href="index.php?a=a" class="ui-btn ui-btn-big">A</a></td>
-                        <td style="width: 50%;"><a href="index.php?a=b" class="ui-btn ui-btn-big">B</a></td>
+                        <td style="width: 50%;"><a href="index.php?a=a" class="ui-btn ui-btn-big button-a">A</a></td>
+                        <td style="width: 50%;"><a href="index.php?a=b" class="ui-btn ui-btn-big button-b">B</a></td>
                     </tr>
                     <tr>
-                        <td><a href="index.php?a=c" class="ui-btn ui-btn-big">C</a></td>
-                        <td><a href="index.php?a=d" class="ui-btn ui-btn-big">D</a></td>
+                        <td><a href="index.php?a=c" class="ui-btn ui-btn-big button-c">C</a></td>
+                        <td><a href="index.php?a=d" class="ui-btn ui-btn-big button-d">D</a></td>
                     </tr>
                 </table>
             </div>
