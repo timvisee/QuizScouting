@@ -98,12 +98,17 @@ $team = null;
 if(isset($_GET['t'])) {
     $team = trim($_GET['t']);
 
-    // Make sure the team is valid
-    if(!StringUtils::equals($team, $VALID_TEAMS, true))
-        showErrorPage();
+    // Make sure any team is set
+    if(strlen($team) > 0) {
+        // Make sure the team is valid
+        if(!StringUtils::equals($team, $VALID_TEAMS, true))
+            showErrorPage();
 
-    // Set the cookie
-    CookieManager::setCookie(REG_TEAM_COOKIE_KEY, $team, '+1 year');
+        // Set the cookie
+        CookieManager::setCookie(REG_TEAM_COOKIE_KEY, $team, '+1 year');
+
+    } else
+        $team = null;
 }
 
 // Get the team
