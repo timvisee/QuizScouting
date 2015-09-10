@@ -22,22 +22,22 @@ $site_root = '';
 
     <!-- Meta -->
     <meta charset="UTF-8">
-    <meta name="description" content="BARbapAPPa by Tim Vis&eacute;e">
-    <meta name="keywords" content="BARbapAPPa,Bar,App">
+    <meta name="description" content="Security Checklist v1.2 by Tim Vis&eacute;e">
+    <meta name="keywords" content="Security Checklist v1.2,Bar,App">
     <meta name="author" content="Tim Vis&eacute;e">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#1D1D1D">
-    <meta name="application-name" content="BARbapAPPa">
+    <meta name="application-name" content="Security Checklist v1.2">
     <meta name="msapplication-TileColor" content="#1D1D1D">
     <meta name="msapplication-config" content="<?=$site_root; ?>style/image/favicon/browserconfig.xml">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="BARbapAPPa">
+    <meta property="og:title" content="Security Checklist v1.2">
     <meta property="og:image" content="<?=$site_root; ?>style/image/favicon/favicon-194x194.png">
-    <meta property="og:description" content="BARbapAPPa by Tim Vis&eacute;e">
+    <meta property="og:description" content="Security Checklist v1.2 by Tim Vis&eacute;e">
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="BARbapAPPa">
+    <meta name="twitter:title" content="Security Checklist v1.2">
     <meta name="twitter:image" content="<?=$site_root; ?>style/image/favicon/apple-touch-icon-120x120.png">
-    <meta name="twitter:description" content="BARbapAPPa by Tim Vis&eacute;e">
+    <meta name="twitter:description" content="Security Checklist v1.2 by Tim Vis&eacute;e">
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="57x57" href="<?=$site_root; ?>style/image/favicon/apple-touch-icon-57x57.png">
@@ -56,7 +56,7 @@ $site_root = '';
     <link rel="icon" type="image/png" href="<?=$site_root; ?>style/image/favicon/favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="<?=$site_root; ?>style/image/favicon/manifest.json">
     <link rel="shortcut icon" href="<?=$site_root; ?>style/image/favicon/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="BARbapAPPa">
+    <meta name="apple-mobile-web-app-title" content="Security Checklist v1.2">
     <meta name="msapplication-TileImage" content="<?=$site_root; ?>style/image/favicon/mstile-144x144.png">
 
     <script>

@@ -1,8 +1,3 @@
-/* Colors. */
-$team-none-color: #333;
-$team-none-color-accent: #222;
-$team-none-color-text: #BBB;
-
 * {
   margin: 0;
   padding: 0;
@@ -11,144 +6,6 @@ $team-none-color-text: #BBB;
 
 body {
   background: #EEE;
-}
-
-#topbar {
-  width: auto;
-  height: 40px;
-  margin: 0;
-  padding: 0 12px;
-  line-height: 40px;
-
-  /* Test */
-  color: $team-none-color-text;
-  //noinspection CssUnknownTarget
-  background: $team-none-color url(image/ui/topbar/topbar_background_overlay.png) repeat-x;
-  border-bottom: 1px solid;
-  border-color: $team-none-color-accent;
-}
-
-#topbar .container {
-  height: inherit;
-  padding: 0 12px 0 0;
-  float: left;
-  display: block;
-  border-color: inherit;
-}
-
-#topbar .container.right {
-  padding: 0 0 0 12px;
-  float: right;
-}
-
-#topbar .container .text,
-#topbar .container a {
-  padding: 0 12px;
-  line-height: inherit;
-  display: inline-block;
-  border-right: 1px solid;
-  border-color: inherit;
-
-  color: inherit;
-}
-
-#topbar .container .text:first-child,
-#topbar .container a:first-child {
-  border-left: 1px solid;
-  border-color: inherit;
-}
-
-#topbar .container.right .text,
-#topbar .container.right a {
-  border-right: none;
-  border-left: 1px solid;
-  border-color: inherit;
-}
-
-#topbar .container.right .text:last-child,
-#topbar .container.right a:last-child {
-  border-right: 1px solid;
-  border-color: inherit;
-}
-
-#page {
-  width: auto;
-  height: auto;
-  margin: 0;
-  paddinG: 12px;
-}
-
-#footer {
-  width: auto;
-  margin: 0;
-  padding: 12px 12px;
-  color: #444;
-  font-size: 12px;
-  text-shadow: 0 1px #AAA;
-  text-align: center;
-
-  /* Test */
-  /*border-top: 1px solid #666;*/
-  display: block;
-}
-
-#footer a {
-  color: inherit;
-}
-
-
-
-
-
-
-
-.group-icon-list {
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  /*border: 1px solid #AAA;*/
-  border-radius: 16px;
-}
-
-.group-icon-list-small {
-  width: 10px;
-  height: 10px;
-  margin: 0 4px 0 0;
-  box-sizing: border-box;
-  /*border: 1px solid #AAA;*/
-  border-radius: 10px;
-}
-
-.group-icon-radio {
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  margin: 0 10px 0 4px;
-  position: relative;
-  top: 3px;
-  border-radius: 16px;
-}
-
-.group-icon-text {
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  position: relative;
-  top: 2px;
-  box-sizing: border-box;
-  /*border: 1px solid #AAA;*/
-  border-radius: 16px;
-}
-
-.group-icon-text-small {
-  width: 10px;
-  height: 10px;
-  margin-right: 4px;
-  position: relative;
-  top: 0px;
-  box-sizing: border-box;
-  /*border: 1px solid #AAA;*/
-  border-radius: 8px;
 }
 
 table tr td {
@@ -171,7 +28,7 @@ img.static-map {
 }
 
 .ui-header .ui-link,
-.ui-footer .ui-link{
+.ui-footer .ui-link {
   /*color: #333 !important;*/
   color: inherit !important;
   text-shadow: inherit;
@@ -179,34 +36,44 @@ img.static-map {
 }
 
 .ui-header .ui-link:hover,
-.ui-footer .ui-link:hover{
+.ui-footer .ui-link:hover {
   text-decoration: underline;
 }
+
+/**
+ * App style.
+ */
 
 hr {
   height: 1px;
   box-sizing: border-box;
   border: none;
-  border-top: 1px solid #d2d2d2;
+  border-top: 1px solid #111 !important;
 }
 
-.app-picture {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  max-height: 800px;
-  margin: 0;
-  padding: 0;
-  background: #FFF;
-
-  box-shadow: 0 0 10px rgba(0, 0, 0, .35);
+.ui-header, .ui-footer {
+  border-color: #111 !important;
 }
 
+.ui-title {
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  color: #AAA !important;
+  text-shadow: 1px 0 1px #111 !important;
+}
 
-
+.ui-btn {
+  color: #CCC !important;
+  text-shadow: 1px 0 1px #222 !important;
+}
 
 .ui-btn-big {
   font-size: 30px;
+}
+
+.ui-overlay-b, .ui-page-theme-b, .ui-page-theme-b .ui-panel-wrapper {
+  color: #CCC !important;
 }
 
 .team-status-box {
@@ -255,26 +122,4 @@ hr {
   line-height: 120%;
   margin: 25px 0;
   display: block;
-}
-
-.ui-title  {
-  color: #AAA !important;
-  text-shadow: 1px 0 1px #111 !important;
-}
-
-.ui-btn {
-  color: #CCC !important;
-  text-shadow: 1px 0 1px #222 !important;
-}
-
-.ui-header, .ui-footer {
-  border-color: #111 !important;
-}
-
-hr {
-  border-color: #111 !important;
-}
-
-.ui-overlay-b,.ui-page-theme-b,.ui-page-theme-b .ui-panel-wrapper {
-  color: #CCC !important;
 }

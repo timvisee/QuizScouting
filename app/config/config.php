@@ -27,11 +27,10 @@ return Array(
 
     'hash' => Array(
         'algorithm' => 'sha256',
-        'salt'  => '7cc8b7833dba1a03dd6d1401aa25262fab029862b494aff2168f1a6b35f1f406'
+        'salt'  => '7cc8b7833dba0a03dd6d1401aa25262fab029862b494aff2168f1a6b35f1f406'
     ),
 
     'app' => Array(
-        // TODO: Disable debug mode on release!
         'debug' => true
     )
 );
