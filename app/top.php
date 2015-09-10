@@ -2,6 +2,7 @@
 
 use app\config\Config;
 use app\question\Question;
+use app\registry\Registry;
 use app\template\PageFooterBuilder;
 use app\template\PageHeaderBuilder;
 
@@ -24,11 +25,10 @@ $site_root = '';
     <meta name="description" content="BARbapAPPa by Tim Vis&eacute;e">
     <meta name="keywords" content="BARbapAPPa,Bar,App">
     <meta name="author" content="Tim Vis&eacute;e">
-    <link rel="copyright" href="about.php">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#2A2A2A">
+    <meta name="theme-color" content="#1D1D1D">
     <meta name="application-name" content="BARbapAPPa">
-    <meta name="msapplication-TileColor" content="#2a2a2a">
+    <meta name="msapplication-TileColor" content="#1D1D1D">
     <meta name="msapplication-config" content="<?=$site_root; ?>style/image/favicon/browserconfig.xml">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="BARbapAPPa">
@@ -59,10 +59,23 @@ $site_root = '';
     <meta name="apple-mobile-web-app-title" content="BARbapAPPa">
     <meta name="msapplication-TileImage" content="<?=$site_root; ?>style/image/favicon/mstile-144x144.png">
 
+    <script>
+        var appTeam = '<?php
+
+            // Get the team
+            $team = $GLOBALS['team'];
+
+            if($team !== null)
+                echo $team;
+
+        ?>';
+    </script>
+
     <!-- Script -->
-    <script src="<?=$site_root; ?>lib/jquery/jquery-1.11.3.min.js"></script>
-    <script src="<?=$site_root; ?>js/jquery.mobile.settings.js"></script>
-    <script src="<?=$site_root; ?>js/main.js"></script>
+    <script src="lib/jquery/jquery-1.11.3.min.js"></script>
+    <script src="lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/jquery.mobile.settings.js"></script>
+    <script src="js/main.js"></script>
 
     <!-- Library: jQuery Mobile -->
     <link rel="stylesheet" href="<?=$site_root; ?>lib/jquery-mobile/jquery.mobile-1.4.5.min.css" />
@@ -71,34 +84,8 @@ $site_root = '';
     <!-- Style -->
     <link rel="stylesheet" type="text/css" href="<?=$site_root; ?>style/style.css">
 
-
     <!-- Include the PubNub Library -->
     <script src="https://cdn.pubnub.com/pubnub-dev.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var PUBNUBchannel = PUBNUB.init({
-                publish_key: 'pub-c-2b9b1d1f-f703-4c65-9324-481ea9c5635d',
-                subscribe_key: 'sub-c-17475c7e-5355-11e5-b316-0619f8945a4f'
-            });
-
-            // Publish a simple message to the demo_tutorial channel
-            setTimeout(function() {
-                PUBNUBchannel.publish({
-                    channel: 'main',
-                    message: {"action": "next"}
-                });
-            }, 3000);
-
-            PUBNUBchannel.subscribe({
-                channel: 'main',
-                message: function(m){
-                    if(m.action == 'next')
-                        refreshPage();
-                }
-            });
-        });
-    </script>
 
 </head>
 <body>
@@ -150,5 +137,5 @@ function showErrorPage($errorMsg = null) {
  * @throws Exception
  */
 function getCurrentQuestion() {
-    return new Question((int) Registry::getValue(REG_QUESTION_CURRENT));
+    return new Question(Registry::getValue(REG_QUESTION_CURRENT)->getValue());
 }

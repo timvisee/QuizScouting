@@ -11,7 +11,7 @@ class PageFooterBuilder {
     public static $FOOTER_TITLE_DEFAULT = '';
 
     /** @var bool Has fixed. */
-    private $fixed = false;
+    private $fixed = true;
 
     /**
      * Constructor.

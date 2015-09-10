@@ -45,7 +45,7 @@ class Question {
     private function getDatabaseValue($columnName) {
         // Prepare a query for the database to list questions with this ID
         $statement = Database::getPDO()->prepare('SELECT ' . $columnName . ' FROM ' . QuestionManager::getDatabaseTableName() . ' WHERE q_id=:q_id');
-        $statement->bindParam(':q_id', $this->id, PDO::PARAM_INT);
+        $statement->bindValue(':q_id', $this->getId(), PDO::PARAM_INT);
 
         // Execute the prepared query
         if(!$statement->execute())
@@ -129,11 +129,17 @@ class Question {
      * @return string
      */
     private function getAnswerRegistryString($team) {
-        return 'question.' . trim($team) . '.answer';
+        return 'question.' . $this->getID() . '.' . trim($team) . '.answer';
     }
 
     public function getTeamAnswer($team) {
-        return Registry::getValue($this->getAnswerRegistryString($team));
+        // Get the registry value
+        $regValue = Registry::getValue($this->getAnswerRegistryString($team));
+
+        if($regValue === null)
+            return '';
+
+        return $regValue->getValue();
     }
 
     public function hasTeamAnswer($team) {

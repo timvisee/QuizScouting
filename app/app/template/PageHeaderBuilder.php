@@ -212,7 +212,7 @@ class PageHeaderBuilder {
         $headerDivStyle .= 'border-bottom: 1px solid #' . $headerShadow . ';';
 
         // Print div opening tag, of the header
-        echo '<div data-role="header" style="' . $headerDivStyle . '"' . ($this->hasFixed() ? ' data-position="fixed"' : '') . '>';
+        echo '<div data-role="header" data-theme="b" style="' . $headerDivStyle . '"' . ($this->hasFixed() ? ' data-position="fixed"' : '') . '>';
 
         // Show a back button if set
         if($this->hasBackButton())

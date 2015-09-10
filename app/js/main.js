@@ -72,7 +72,7 @@ function startRefreshTimer() {
             refreshPage();
             hideLoader();
         }
-    }, 1000 * 60 * 2);
+    }, 1000 * 15);
 }
 
 /**
@@ -496,15 +496,37 @@ function refreshPage(transition) {
     // Use the transition default if not set
     transition = typeof transition !== 'undefined' ? transition : 'none';
 
+    // Append the team tag if set
+    var teamTag = '';
+    if(appTeam != null)
+        teamTag = '&t=' + appTeam;
+
+    // Reload the page with the specified transition
+    jQuery.mobile.changePage('index.php?v=' + Math.random() + teamTag, {
+        allowSamePageTransition: true,
+        transition: transition,
+        reloadPage: true,
+        reverse: false,
+        changeHash: true
+    });
+}
+
+/* /**
+ * Refresh the current jQuery mobile page.
+ * /
+function refreshPage(transition) {
+    // Use the transition default if not set
+    transition = typeof transition !== 'undefined' ? transition : 'none';
+
     // Reload the page with the specified transition
     jQuery.mobile.changePage(window.location.href, {
         allowSamePageTransition: true,
         transition: transition,
         reloadPage: true,
         reverse: false,
-        changeHash: false
+        changeHash: true
     });
-}
+}*/
 
 function setPictureApprovalStatusOnPage(pictureId, approvalStatus) {
     setPictureApprovalStatus(pictureId, approvalStatus, function() {
@@ -904,27 +926,196 @@ function hideLoader() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Set a question answer.
  *
  * @param answer The answer.
- * @param success
+ * @param successCallback
  */
-function setAnswer(answer, success) {
+function setAnswer(answer, successCallback) {
     showLoader('Antwoord sturen...');
 
     // Send an AJAX request to send the answer, call the success callback if the request succeed.
     $.ajax({
         dataType: "json",
-        url: "ajax/setquestion.php",
+        url: "ajax/setquestion.php?t=" + appTeam,
         data: {"answer": answer},
-        success: success,
-        complete: function {
+        success: successCallback,
+        error: function() {
+            alert('Er is een fout opgetreden! Probeer het opnieuw.');
+        },
+        complete: function() {
             // Hide the loader
             hideLoader();
         }
     });
 }
+
+var clientUid = Math.random();
+
+var teamAnswered = {
+    'a': false,
+    'b': false,
+    'c': false
+};
+
+var teamNames = {
+    'a': 'Team A',
+    'b': 'Team B',
+    'c': 'Team C'
+};
+var htmlWaiter = '<img src="style/image/loader/loader_gray.gif" />';
+
+var PUBNUBchannel;
+
+function sendData(data) {
+    // Set the source team
+    data.sourceTeam = appTeam;
+    data.uid = clientUid;
+
+    // Send the data
+    PUBNUBchannel.publish({
+        channel: 'main',
+        message: data
+    });
+}
+
+function setTeamStatus(team, answer) {
+    // Get the selector
+    var selector = $('.team-status-box.team-' + team);
+    var textSelector = $('.team-status-text.team-' + team);
+
+    if(answer == null) {
+        if(selector.hasClass('status-wait'))
+            selector.removeClass('status-wait');
+        if(selector.hasClass('status-good'))
+            selector.removeClass('status-good');
+        if(selector.hasClass('status-bad'))
+            selector.removeClass('status-bad');
+
+        // Set the content
+        selector.html(teamNames[team] + '<br />' + htmlWaiter);
+
+        // Set the status
+        teamAnswered[team] = false;
+
+        textSelector.html('Wachten op antwoord...');
+
+    } else {
+        selector.addClass('status-wait', 500, 'swing');
+        if(selector.hasClass('status-good'))
+            selector.removeClass('status-good');
+        if(selector.hasClass('status-bad'))
+            selector.removeClass('status-bad');
+
+        // Set the content
+        selector.html(teamNames[team]);
+
+        // Set the status
+        teamAnswered[team] = true;
+
+        textSelector.html('Antwoord ' + answer.toUpperCase());
+
+    }
+
+    /*else if(status == 2) {
+        selector.addClass('status-good', 500, 'swing');
+        if(selector.hasClass('status-wait'))
+            selector.removeClass('status-wait');
+        if(selector.hasClass('status-bad'))
+            selector.removeClass('status-bad');
+
+        // Set the content
+        selector.html(teamNames[team]);
+
+        textSelector.html('TEST!');
+
+    } else if(status == 3) {
+        selector.addClass('status-bad', 500, 'swing');
+        if(selector.hasClass('status-wait'))
+            selector.removeClass('status-wait');
+        if(selector.hasClass('status-bad'))
+            selector.removeClass('status-bad');
+
+        // Set the content
+        selector.html(teamNames[team]);
+
+        textSelector.html('TEST!');
+    }*/
+}
+
+$(document).ready(function() {
+    PUBNUBchannel = PUBNUB.init({
+        publish_key: 'pub-c-2b9b1d1f-f703-4c65-9324-481ea9c5635d',
+        subscribe_key: 'sub-c-17475c7e-5355-11e5-b316-0619f8945a4f'
+    });
+
+    PUBNUBchannel.subscribe({
+        channel: 'main',
+        message: function(data) {
+            // Make sure this msg is from a different client
+            if(data.uid == clientUid)
+                return;
+
+            // Check if an answer is set
+            if(typeof(data.a) !== 'undefined') {
+                // Set the team status
+                setTeamStatus(data.sourceTeam, data.a);
+
+                // If this is the current team, go to the next page
+                if(data.sourceTeam == appTeam)
+                    refreshPage("slide");
+            }
+
+            // Check if an answer is set
+            if(typeof(data.action) !== 'undefined') {
+                if(data.action == 'startQuiz' && data.sourceTeam != clientUid)
+                    refreshPage('flow');
+
+                if(data.action == 'showAnswer' && data.sourceTeam != clientUid) {
+                    if(appTeam != 'y')
+                        refreshPage('slide');
+                    else
+                        refreshPage('flip');
+                }
+
+                if(data.action == 'showAnswers' && data.sourceTeam != clientUid)
+                    if(appTeam != 'y')
+                        refreshPage('slide');
+                    else
+                        refreshPage('fade');
+
+                if(data.action == 'nextQuestion' && data.sourceTeam != clientUid)
+                    refreshPage('flow');
+
+                if(data.action == 'showWelcome' && data.sourceTeam != clientUid)
+                    refreshPage('flow');
+
+                if(data.action == 'reset' && data.sourceTeam != clientUid)
+                    refreshPage('flow');
+            }
+
+            // Continue to the next page if everybody answered
+            if(appTeam == 'z' && teamAnswered['a'] && teamAnswered['b'] && teamAnswered['c'])
+                refreshPage('slide');
+        }
+    });
+});
 
 // Create the button click handlers
 $(document).on("pagecreate", function() {
@@ -933,6 +1124,128 @@ $(document).on("pagecreate", function() {
     $('.button-b').click(function() { processButtonClick('b'); });
     $('.button-c').click(function() { processButtonClick('c'); });
     $('.button-d').click(function() { processButtonClick('d'); });
+    $('.button-start-quiz').click(function() {
+        showLoader('Antwoord tonen...');
+        $.ajax({
+            dataType: "json",
+            url: "ajax/setstep.php?t=" + appTeam,
+            data: {"step": 1},
+            success: function() {
+                sendData({action: 'startQuiz'});
+                refreshPage('slide');
+            },
+            error: function() {
+                alert('Er is een fout opgetreden! Probeer het opnieuw.');
+            },
+            complete: function() {
+                // Hide the loader
+                hideLoader();
+            }
+        });
+    });
+    $('.button-show-answers').click(function() {
+        showLoader('Antwoord tonen...');
+        $.ajax({
+            dataType: "json",
+            url: "ajax/setstep.php?t=" + appTeam,
+            data: {"step": 2},
+            success: function() {
+                sendData({action: 'showAnswers'});
+                refreshPage('slide');
+            },
+            error: function() {
+                alert('Er is een fout opgetreden! Probeer het opnieuw.');
+            },
+            complete: function() {
+                // Hide the loader
+                hideLoader();
+            }
+        });
+    });
+    $('.button-show-answer').click(function() {
+        showLoader('Antwoord tonen...');
+        $.ajax({
+            dataType: "json",
+            url: "ajax/setstep.php?t=" + appTeam,
+            data: {"step": 3},
+            success: function() {
+                sendData({action: 'showAnswer'});
+                refreshPage('slide');
+            },
+            error: function() {
+                alert('Er is een fout opgetreden! Probeer het opnieuw.');
+            },
+            complete: function() {
+                // Hide the loader
+                hideLoader();
+            }
+        });
+    });
+    $('.button-next-question').click(function() {
+        showLoader('Volgende vraag aanvragen...');
+        $.ajax({
+            dataType: "json",
+            url: "ajax/nextquestion.php?t=" + appTeam,
+            data: {},
+            success: function(data) {
+                // Print the error if an error occurred
+                if(typeof(data.error) !== 'undefined') {
+                    // Print the error
+                    alert('Error: ' + data.error);
+
+                    // Refresh the page and return
+                    refreshPage();
+                    return;
+                }
+
+                sendData({action: 'nextQuestion'});
+                refreshPage('flow');
+            },
+            error: function() {
+                alert('Er is een fout opgetreden! Probeer het opnieuw.');
+            },
+            complete: function() {
+                // Hide the loader
+                hideLoader();
+            }
+        });
+    });
+    $('.button-show-welcome').click(function() {
+        showLoader('Welkom tonen...');
+        $.ajax({
+            dataType: "json",
+            url: "ajax/nextquestion.php?t=" + appTeam,
+            data: {},
+            success: function(data) {
+                // Print the error if an error occurred
+                if(typeof(data.error) !== 'undefined') {
+                    // Print the error
+                    alert('Error: ' + data.error);
+
+                    // Refresh the page and return
+                    refreshPage();
+                    return;
+                }
+
+                sendData({action: 'showWelcome'});
+                refreshPage('flow');
+            },
+            error: function() {
+                alert('Er is een fout opgetreden! Probeer het opnieuw.');
+            },
+            complete: function() {
+                // Hide the loader
+                hideLoader();
+            }
+        });
+    });
+    $('.button-reset').click(function() {
+        showLoader('Checklist resetten...');
+        setTimeout(function() {
+            sendData({action: 'reset'});
+            hideLoader();
+        }, 500);
+    });
 
     /**
      * Process a button click.
@@ -940,8 +1253,53 @@ $(document).on("pagecreate", function() {
      * @param answer The answer.
      */
     function processButtonClick(answer) {
-        setAnswer(answer);
-        refreshPage('slide');
+        setAnswer(answer, function(data) {
+            // Print the error if an error occurred
+            if(typeof(data.error) !== 'undefined') {
+                // Print the error
+                alert('Error: ' + data.error);
+
+                // Refresh the page and return
+                refreshPage();
+                return;
+            }
+
+            // Send the answer
+            sendData({a: answer});
+
+            // Refresh the page
+            refreshPage("slide");
+        });
+
         return false;
     }
+});
+
+// Create the button click handlers
+$(document).on("pagecreate", "#page-wait-for-answers", function() {
+    // Send an AJAX request to send the answer, call the success callback if the request succeed.
+    showLoader('Team status laden...');
+    $.ajax({
+        dataType: "json",
+        url: "ajax/getteamanswered.php?t=" + appTeam,
+        data: {},
+        success: function(data) {
+            teamAnswered['a'] = data.a;
+            teamAnswered['b'] = data.b;
+            teamAnswered['c'] = data.c;
+        },
+        complete: function() {
+            // Hide the loader
+            hideLoader();
+        }
+    });
+});
+
+$(document).bind( "mobileinit", function () {
+    $.mobile.page.prototype.options.backBtnTheme = 'b';
+    $.mobile.page.prototype.options.headerTheme = 'b';
+    $.mobile.page.prototype.options.footerTheme = 'b';
+    $.mobile.page.prototype.options.contentTheme = 'b';
+    $.mobile.page.prototype.options.theme = 'b';
+    $.mobile.listview.prototype.options.filterTheme = 'b';
 });

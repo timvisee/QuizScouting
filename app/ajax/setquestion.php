@@ -1,55 +1,20 @@
 <?php
 
-<?php
-
 use app\question\Question;
 use app\registry\Registry;
 use carbon\core\cookie\CookieManager;
 use carbon\core\util\StringUtils;
 
 // Include the page top
-require_once('top.php');
+require_once('../app/init.php');
 
 // Team cookie key
 define('REG_TEAM_COOKIE_KEY', 'team');
 define('REG_QUESTION_CURRENT', 'question.current');
 
-// Valid teams and team names
-$VALID_TEAMS = Array('a', 'b', 'c', 'y', 'z');
-$TEAM_NAMES = Array(
-    'a' => 'Team A',
-    'b' => 'Team B',
-    'c' => 'Team C'
-);
-
-// Define the team variable
-$team = null;
-
-// Get the team
-if(isset($_GET['t'])) {
-    $team = trim($_GET['t']);
-
-    // Make sure the team is valid
-    if(!StringUtils::equals($team, $VALID_TEAMS, true))
-        showErrorPage();
-
-    // Set the cookie
-    CookieManager::setCookie(REG_TEAM_COOKIE_KEY, $team, '+1 year');
-}
-
 // Get the team
 if($team == null)
     $team = CookieManager::getCookie(REG_TEAM_COOKIE_KEY);
-
-/**
- * Get the current question.
- *
- * @return Question
- * @throws Exception
- */
-function getCurrentQuestion() {
-    return new Question((int) Registry::getValue(REG_QUESTION_CURRENT));
-}
 
 /**
  * Return an error.
@@ -78,6 +43,16 @@ function returnJson($array) {
     die($json);
 }
 
+/**
+ * Get the current question.
+ *
+ * @return Question The current question.
+ * @throws Exception
+ */
+function getCurrentQuestion() {
+    return new Question(Registry::getValue(REG_QUESTION_CURRENT)->getValue());
+}
+
 // Make sure the team is valid
 if(!StringUtils::equals($team, $VALID_TEAMS, true))
     returnError('Invalid team.');
@@ -86,11 +61,11 @@ if(!StringUtils::equals($team, $VALID_TEAMS, true))
 $question = getCurrentQuestion();
 
 // Make sure the answer is set
-if(!isset($_GET['a']))
+if(!isset($_GET['answer']))
     returnError('Answer not set!');
 
 // Get the answer and make sure it's valid
-$answer = trim($_GET['a']);
+$answer = trim($_GET['answer']);
 if(!StringUtils::equals($answer, Array('a', 'b', 'c', 'd', true, false)))
     returnError('Invalid answer.');
 
@@ -101,4 +76,5 @@ if($question->hasTeamAnswer(($team)))
 // Set the answer
 $question->setTeamAnswer($team, $answer);
 
+// Return the result with JSON
 returnJson(Array('result' => 'Answer set.'));

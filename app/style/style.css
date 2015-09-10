@@ -167,7 +167,7 @@ hr {
   font-size: 30px; }
 
 .team-status-box {
-  background: #CCC;
+  background: #686868;
   width: 320px;
   height: 160px;
   text-align: center;
@@ -176,12 +176,18 @@ hr {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
-  border: 1px solid #AAA;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  border: 1px solid #1D1D1D;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
   font-weight: bold;
   vertical-align: middle;
   margin: 40px auto;
-  padding: 25px; }
+  padding: 25px;
+  color: #EEE; }
+
+.team-status-box.status-wait {
+  background: #4898E6;
+  border-color: #306297;
+  color: #EAEAEA; }
 
 .team-status-box.status-good {
   background: darkgreen;
@@ -201,5 +207,22 @@ hr {
   line-height: 120%;
   margin: 25px 0;
   display: block; }
+
+.ui-title {
+  color: #AAA !important;
+  text-shadow: 1px 0 1px #111 !important; }
+
+.ui-btn {
+  color: #CCC !important;
+  text-shadow: 1px 0 1px #222 !important; }
+
+.ui-header, .ui-footer {
+  border-color: #111 !important; }
+
+hr {
+  border-color: #111 !important; }
+
+.ui-overlay-b, .ui-page-theme-b, .ui-page-theme-b .ui-panel-wrapper {
+  color: #CCC !important; }
 
 /*# sourceMappingURL=style.css.map */

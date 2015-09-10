@@ -203,4 +203,18 @@ class Registry {
         // Return true if there's any registry found with this ID
         return $statement->rowCount() > 0;
     }
+
+    /**
+     * Delete all registry content.
+     *
+     * @throws Exception Throws if an error occurred.
+     */
+    public static function deleteAll() {
+        // Prepare a query for the values being deleted
+        $statement = Database::getPDO()->prepare('DELETE FROM ' . static::getDatabaseTableName());
+
+        // Execute the prepared query
+        if(!$statement->execute())
+            throw new Exception('Failed to query the database.');
+    }
 }

@@ -33,7 +33,7 @@ class QuestionManager {
      */
     public static function getQuestions() {
         // Build a query to select the questions
-        $query = 'SELECT question_id FROM ' . static::getDatabaseTableName();
+        $query = 'SELECT q_id FROM ' . static::getDatabaseTableName();
 
         // Execute the query
         $statement = Database::getPDO()->query($query);
@@ -47,7 +47,7 @@ class QuestionManager {
 
         // Return the number of rows
         foreach($statement->fetchAll(PDO::FETCH_ASSOC) as $data)
-            $questions[] = new Question($data['question_id']);
+            $questions[] = new Question($data['q_id']);
 
         // Return the list of questions
         return $questions;
@@ -62,7 +62,7 @@ class QuestionManager {
      */
     public static function getQuestionCount() {
         // Create a row count query on the database instance
-        $statement = Database::getPDO()->query('SELECT question_id FROM ' . static::getDatabaseTableName());
+        $statement = Database::getPDO()->query('SELECT q_id FROM ' . static::getDatabaseTableName());
 
         // Make sure the query succeed
         if($statement === false)
@@ -87,7 +87,7 @@ class QuestionManager {
             throw new Exception('Invalid question ID.');
 
         // Prepare a query for the database to list questions with this ID
-        $statement = Database::getPDO()->prepare('SELECT question_id FROM ' . static::getDatabaseTableName() . ' WHERE question_id=:id');
+        $statement = Database::getPDO()->prepare('SELECT q_id FROM ' . static::getDatabaseTableName() . ' WHERE question_id=:id');
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
 
         // Execute the prepared query
@@ -96,5 +96,31 @@ class QuestionManager {
 
         // Return true if there's any question found with this ID
         return $statement->rowCount() > 0;
+    }
+
+    /**
+     * Get the last question.
+     *
+     * @return Question Last question.
+     *
+     * @throws Exception
+     */
+    public static function getLastQuestion() {
+        // Build a query to select the questions
+        $query = 'SELECT q_id FROM ' . static::getDatabaseTableName() . ' ORDER BY q_id DESC LIMIT 1';
+
+        // Execute the query
+        $statement = Database::getPDO()->query($query);
+
+        // Make sure the query succeed
+        if($statement === false)
+            throw new Exception('Failed to query the database.');
+
+        // Make sure a question is found
+        if($statement->rowCount() <= 0)
+            return null;
+
+        // Return the question
+        return new Question($statement->fetch(PDO::FETCH_ASSOC)['q_id']);
     }
 }
