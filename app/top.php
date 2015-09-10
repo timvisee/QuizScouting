@@ -87,6 +87,9 @@ $site_root = '';
     <!-- Include the PubNub Library -->
     <script src="https://cdn.pubnub.com/pubnub-dev.js"></script>
 
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
 

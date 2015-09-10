@@ -1,7 +1,9 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+
 * {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Ubuntu', Arial, sans-serif !important;
 }
 
 body {
@@ -53,19 +55,26 @@ hr {
 
 .ui-header, .ui-footer {
   border-color: #111 !important;
+  background: url(image/background/background-header.png) repeat-x;
+  box-shadow: 0 0 20px black;
+}
+
+.ui-overlay-b, .ui-page-theme-b, .ui-page-theme-b .ui-panel-wrapper {
+  background: url(image/background/background-main.png) repeat !important;
 }
 
 .ui-title {
   width: 100% !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  color: #AAA !important;
+  color: #CCC !important;
   text-shadow: 1px 0 1px #111 !important;
 }
 
 .ui-btn {
   color: #CCC !important;
   text-shadow: 1px 0 1px #222 !important;
+  font-family: 'Ubuntu', Arial, sans-serif !important;
 }
 
 .ui-btn-big {
@@ -77,7 +86,7 @@ hr {
 }
 
 .team-status-box {
-  background: #686868;
+  background: #4E4E4E;
   width: 320px;
   height: 160px;
   text-align: center;
@@ -96,8 +105,8 @@ hr {
 }
 
 .team-status-box.status-wait {
-  background: #4898E6;
-  border-color: #306297;
+  background: #B79B1A;
+  border-color: #604911;
   color: #EAEAEA;
 }
 
