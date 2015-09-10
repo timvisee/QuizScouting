@@ -734,7 +734,7 @@ if(StringUtils::equals($team, 'z')) {
                     <br />
                     YAAAY!<br /><br />
                     <hr /><br />
-                    <a href="index.php?action=reset" class="ui-btn ui-corner-all ui-shadow button-reset" data-transition="slide" data-direction="reverse">Reset Checklist</a>
+                    <a href="index.php?action=reset&t=z" class="ui-btn ui-corner-all ui-shadow button-reset" data-transition="slide" data-direction="reverse">Reset Checklist</a>
                 </center>
             </div>
 
